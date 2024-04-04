@@ -5,19 +5,24 @@ import Game from "./pages/Game";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import { Container } from "./styled/Container";
+import { Main } from "./styled/Main";
+import Global from "./styled/Global";
 
 function App() {
   return (
     <Router>
-      <Container>
-        <Navbar />
-        <Routes>
-          <Route path="/game" element={<Game />} />
-          <Route path="/highScores" element={<HighScores />} />
-          <Route path="/gameOver" element={<GameOver />} />
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </Container>
+      <Global />
+      <Main>
+        <Container>
+          <Navbar />
+          <Routes>
+            <Route path="/game" element={<Game />} />
+            <Route path="/highScores" element={<HighScores />} />
+            <Route path="/gameOver" element={<GameOver />} />
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </Container>
+      </Main>
     </Router>
   );
 }
