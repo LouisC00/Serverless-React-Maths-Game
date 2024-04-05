@@ -13,6 +13,7 @@ export const StyledScore = styled.p`
 `;
 
 export const StyledTimer = styled.p`
+  min-width: 150px;
   font-size: 1.5rem;
   grid-column: 3;
 `;
