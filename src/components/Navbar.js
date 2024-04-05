@@ -22,9 +22,6 @@ export default function Navbar() {
         <li>
           <StyledLink to="/highScores">High Scores</StyledLink>
         </li>
-        <li>
-          <Link to="/gameOver">Game Over</Link>
-        </li>
       </StyleNavItems>
     </StyledNavBar>
   );
