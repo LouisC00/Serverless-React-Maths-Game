@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import {
   StyledGame,
@@ -14,13 +14,18 @@ const addLeadingZeros = (num, length) => {
 };
 
 export default function Game() {
-  const [score, setScore] = useState(1);
   const MAX_SECOND = 999;
+  const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+  const [currentCharacter, setCurrentCharacter] = useState("");
+
+  const [score, setScore] = useState(1);
   const [ms, setMs] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const navigate = useNavigate(); // Use the useNavigate hook
 
   useEffect(() => {
+    setRandomCharacter();
     const startTime = new Date();
     const interval = setInterval(() => {
       const endTime = new Date();
@@ -39,23 +44,57 @@ export default function Game() {
     }
   }, [seconds, ms, navigate]);
 
-  const keyUpHandler = (e) => {
-    console.log(e.key);
-  };
+  const keyUpHandler = useCallback(
+    (e) => {
+      console.log(e.key);
+      if (e.key == currentCharacter) {
+        setScore((prevScore) => prevScore + 1);
+      } else {
+        if (score > 0) {
+          setScore((prevScore) => prevScore - 1);
+        }
+      }
+      setRandomCharacter();
+    },
+    [currentCharacter]
+  );
 
   useEffect(() => {
     document.addEventListener("keyup", keyUpHandler);
     return () => {
       document.removeEventListener("keyup", keyUpHandler);
     };
-  }, []);
+  }, [keyUpHandler]);
+
+  // useEffect(() => {
+  //   const keyUpHandler = (e) => {
+  //     if (e.key === currentCharacter) {
+  //       setScore((prevScore) => prevScore + 1);
+  //     } else {
+  //       if (score > 0) {
+  //         setScore((prevScore) => prevScore - 1);
+  //       }
+  //     }
+  //     setRandomCharacter();
+  //   };
+
+  //   document.addEventListener("keyup", keyUpHandler);
+  //   return () => {
+  //     document.removeEventListener("keyup", keyUpHandler);
+  //   };
+  // }, [currentCharacter]);
+
+  const setRandomCharacter = () => {
+    const randomInt = Math.floor(Math.random() * 36);
+    setCurrentCharacter(characters[randomInt]);
+  };
 
   return (
     <StyledGame>
       <StyledScore>
         Score:<StrongText>{score}</StrongText>
       </StyledScore>
-      <StyledCharacter>A</StyledCharacter>
+      <StyledCharacter>{currentCharacter}</StyledCharacter>
       <StyledTimer>
         Time:{" "}
         <StrongText>
