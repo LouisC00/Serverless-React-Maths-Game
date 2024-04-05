@@ -15,7 +15,7 @@ const addLeadingZeros = (num, length) => {
 
 export default function Game() {
   const [score, setScore] = useState(1);
-  const MAX_SECOND = 5;
+  const MAX_SECOND = 999;
   const [ms, setMs] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const navigate = useNavigate(); // Use the useNavigate hook
@@ -38,6 +38,17 @@ export default function Game() {
       navigate("/gameOver"); // Use navigate instead of history.push
     }
   }, [seconds, ms, navigate]);
+
+  const keyUpHandler = (e) => {
+    console.log(e.key);
+  };
+
+  useEffect(() => {
+    document.addEventListener("keyup", keyUpHandler);
+    return () => {
+      document.removeEventListener("keyup", keyUpHandler);
+    };
+  }, []);
 
   return (
     <StyledGame>
