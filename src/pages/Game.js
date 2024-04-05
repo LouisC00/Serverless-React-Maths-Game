@@ -44,7 +44,7 @@ export default function Game() {
     }
   }, [seconds, ms, navigate]);
 
-  const keyUpHandler = useCallback(
+  const keyDownHandler = useCallback(
     (e) => {
       console.log(e.key);
       if (e.key == currentCharacter) {
@@ -60,14 +60,14 @@ export default function Game() {
   );
 
   useEffect(() => {
-    document.addEventListener("keyup", keyUpHandler);
+    document.addEventListener("keydown", keyDownHandler);
     return () => {
-      document.removeEventListener("keyup", keyUpHandler);
+      document.removeEventListener("keydown", keyDownHandler);
     };
-  }, [keyUpHandler]);
+  }, [keyDownHandler]);
 
   // useEffect(() => {
-  //   const keyUpHandler = (e) => {
+  //   const keyDownHandler = (e) => {
   //     if (e.key === currentCharacter) {
   //       setScore((prevScore) => prevScore + 1);
   //     } else {
@@ -78,9 +78,9 @@ export default function Game() {
   //     setRandomCharacter();
   //   };
 
-  //   document.addEventListener("keyup", keyUpHandler);
+  //   document.addEventListener("keydown", keyDownHandler);
   //   return () => {
-  //     document.removeEventListener("keyup", keyUpHandler);
+  //     document.removeEventListener("keydown", keyDownHandler);
   //   };
   // }, [currentCharacter]);
 
