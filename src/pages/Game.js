@@ -37,7 +37,7 @@ export default function Game() {
       setMs(remainingMs);
     }, 1);
     return () => clearInterval(interval);
-  }, []);
+  }, [setScore]);
 
   useEffect(() => {
     if (seconds <= -1) {
@@ -57,7 +57,7 @@ export default function Game() {
       }
       setRandomCharacter();
     },
-    [currentCharacter]
+    [currentCharacter, score, setScore]
   );
 
   useEffect(() => {
