@@ -6,26 +6,27 @@ import {
   StyledTimer,
   StyledCharacter,
 } from "../styled/Game";
-
 import { StrongText } from "../styled/StrongText";
+import { useScore } from "../context/ScoreContext";
 
 const addLeadingZeros = (num, length) => {
   return String(num).padStart(length, "0");
 };
 
 export default function Game() {
-  const MAX_SECOND = 999;
+  const MAX_SECOND = 5;
   const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
 
   const [currentCharacter, setCurrentCharacter] = useState("");
 
-  const [score, setScore] = useState(1);
+  const [score, setScore] = useScore();
   const [ms, setMs] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const navigate = useNavigate(); // Use the useNavigate hook
 
   useEffect(() => {
     setRandomCharacter();
+    setScore(0);
     const startTime = new Date();
     const interval = setInterval(() => {
       const endTime = new Date();
@@ -47,7 +48,7 @@ export default function Game() {
   const keyDownHandler = useCallback(
     (e) => {
       console.log(e.key);
-      if (e.key == currentCharacter) {
+      if (e.key === currentCharacter) {
         setScore((prevScore) => prevScore + 1);
       } else {
         if (score > 0) {
