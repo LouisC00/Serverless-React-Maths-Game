@@ -4,8 +4,8 @@ Airtable.configure({
   apiKey: process.env.AIRTABLE_TOKEN,
 });
 
-const base = require("airtable").base("app4rRaa5uCAaQ6CZ");
-const table = base.table("Table1");
+const base = require("airtable").base(process.env.AIRTABLE_BASE);
+const table = base.table(process.env.AIRTABLE_TABLE);
 
 exports.handler = async (event, context, callback) => {
   try {
