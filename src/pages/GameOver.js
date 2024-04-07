@@ -13,9 +13,11 @@ export default function GameOver() {
   const [scoreMessage, setScoreMessage] = useState("");
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
-  if (score === -1) {
-    navigate("/");
-  }
+  useEffect(() => {
+    if (score === -1) {
+      navigate("/");
+    }
+  }, [navigate, score]);
 
   useEffect(() => {
     const saveHighScore = async () => {
