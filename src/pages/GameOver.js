@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useScore } from "../context/ScoreContext";
 import { StyledLink } from "../styled/Navbar";
 import { StyledCharacter } from "../styled/Game";
+import { StyledTitle } from "../styled/Title";
 import { useEffect, useState } from "react";
 
 export default function GameOver() {
@@ -37,11 +38,15 @@ export default function GameOver() {
   }, [score]);
   return (
     <div>
-      <h1>Game Over</h1>
+      <StyledTitle>Game Over</StyledTitle>
+      <h2>{scoreMessage}</h2>
       <StyledCharacter>{score}</StyledCharacter>
-      <p>{scoreMessage}</p>
-      <StyledLink to="/">Go Home</StyledLink>
-      <StyledLink to="/game">Play Again</StyledLink>
+      <div>
+        <StyledLink to="/">Go Home</StyledLink>
+      </div>
+      <div>
+        <StyledLink to="/game">Play Again</StyledLink>
+      </div>
     </div>
   );
 }
