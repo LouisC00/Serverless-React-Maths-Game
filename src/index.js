@@ -14,6 +14,7 @@ root.render(
       clientId="nHT6rGAdhvV0Cab34w03g00HPaWBbQqw"
       authorizationParams={{
         redirect_uri: window.location.origin,
+        audience: "https://louis-type-game.netlify.app/",
       }}
     >
       <ScoreProvider>
