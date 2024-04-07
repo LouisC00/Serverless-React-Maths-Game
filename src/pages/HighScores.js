@@ -23,9 +23,9 @@ export default function HighScores() {
     <div>
       <h1>High Scores</h1>
       <ScoresList>
-        {highScores.map((score) => (
+        {highScores.map((score, index) => (
           <ScoreLI key={score.id}>
-            {score.fields.name} - {score.fields.score}
+            {index + 1}. {score.fields.name} - {score.fields.score}
           </ScoreLI>
         ))}
       </ScoresList>
