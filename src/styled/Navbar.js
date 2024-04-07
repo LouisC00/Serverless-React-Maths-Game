@@ -8,7 +8,8 @@ export const StyledNavBar = styled.nav`
 `;
 
 export const StyledNavBrand = styled.div`
-  font-size: 1.4;
+  font-size: 1.4rem;
+  text-align: left;
 
   & > a {
     text-decoration: none;
