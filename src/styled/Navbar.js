@@ -5,6 +5,7 @@ export const StyledNavBar = styled.nav`
   display: grid;
   grid-template-columns: 1fr auto;
   padding: 20px;
+  align-items: center;
 `;
 
 export const StyledNavBrand = styled.div`
