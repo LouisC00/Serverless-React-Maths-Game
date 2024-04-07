@@ -1,7 +1,6 @@
 const { table, getHighScores } = require("./utils/airtable");
 
 exports.handler = async (event, context, callback) => {
-  console.log(event);
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -17,6 +16,8 @@ exports.handler = async (event, context, callback) => {
     };
   }
 
+  let updatedRecord; // Define updatedRecord outside the if block
+
   try {
     const records = await getHighScores(false);
 
@@ -25,18 +26,18 @@ exports.handler = async (event, context, callback) => {
       typeof lowestRecord.fields.score === "undefined" ||
       score > lowestRecord.fields.score
     ) {
-      const updatedRecord = { id: lowestRecord.id, fields: { name, score } };
+      updatedRecord = { id: lowestRecord.id, fields: { name, score } }; // Update the record
       await table.update([updatedRecord]);
     }
 
     return {
       statusCode: 200,
-      body: JSON.stringify(formattedRecords),
+      body: JSON.stringify(updatedRecord || { message: "No update needed" }), // Return updatedRecord or a message if no update was needed
     };
   } catch (err) {
     return {
-      statusCode: 200,
-      body: JSON.stringify({}),
+      statusCode: 500, // Use status code 500 for server errors
+      body: JSON.stringify({ err: err.message || "An error occurred" }), // Return the error message
     };
   }
 };
