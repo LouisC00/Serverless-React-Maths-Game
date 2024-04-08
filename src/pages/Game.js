@@ -47,7 +47,6 @@ export default function Game() {
 
   const keyDownHandler = useCallback(
     (e) => {
-      console.log(e.key);
       if (e.key === currentCharacter) {
         setScore((prevScore) => prevScore + 1);
       } else {

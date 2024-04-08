@@ -10,7 +10,7 @@ export default function HighScores() {
       try {
         const res = await fetch("/.netlify/functions/getHighScores");
         const scores = await res.json();
-        console.log(scores);
+
         setHighScores(scores);
       } catch (err) {
         console.log(err);

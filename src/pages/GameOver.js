@@ -32,7 +32,7 @@ export default function GameOver() {
         };
         const res = await fetch("/.netlify/functions/saveHighScore", options);
         const data = await res.json();
-        console.log(data);
+
         if (data.id) {
           setScoreMessage("Congrats! You got a high score!!");
         } else {
