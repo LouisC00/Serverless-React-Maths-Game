@@ -7,6 +7,8 @@ const {
 exports.handler = async (event, context, callback) => {
   const token = getAccessTokenFromHeaders(event.headers);
   const user = await validateAccessToken(token);
+  console.log(token);
+  console.log(user);
   if (!user) {
     return {
       statusCode: 403,
