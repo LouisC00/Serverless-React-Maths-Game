@@ -21,7 +21,8 @@ exports.handler = async (event, context, callback) => {
     };
   }
 
-  const { score, name } = JSON.parse(event.body);
+  const { score } = JSON.parse(event.body);
+  const name = user["https://louis-type-game.netlify.app/nickname"];
   if (typeof score === undefined || !name) {
     return {
       statusCode: 400,
