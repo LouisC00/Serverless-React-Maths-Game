@@ -1,10 +1,11 @@
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useScore } from "../context/ScoreContext";
 import { StyledLink } from "../styled/Navbar";
 import { StyledCharacter } from "../styled/Game";
 import { StyledTitle } from "../styled/Title";
-import { useEffect, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import { Accent } from "../styled/Accent";
 
 export default function GameOver() {
   const navigate = useNavigate();
@@ -47,6 +48,20 @@ export default function GameOver() {
     }
   }, [getAccessTokenSilently, isAuthenticated, score]);
 
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === "s") {
+        navigate("/game"); // Navigate to the game page when 's' is pressed
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [navigate]);
+
   return (
     <div>
       <StyledTitle>Game Over</StyledTitle>
@@ -59,7 +74,9 @@ export default function GameOver() {
         <StyledLink to="/">Go Home</StyledLink>
       </div>
       <div>
-        <StyledLink to="/game">Play Again</StyledLink>
+        <StyledLink to="/game">
+          Click here or type <Accent>'s'</Accent> to play again
+        </StyledLink>
       </div>
     </div>
   );
