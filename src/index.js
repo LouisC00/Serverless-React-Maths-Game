@@ -5,16 +5,17 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ScoreProvider } from "./context/ScoreContext";
 import { Auth0Provider } from "@auth0/auth0-react";
+import config from "./auth_config.json";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Auth0Provider
-      domain="dev-o6sw3kp8b583p1sk.us.auth0.com"
-      clientId="nHT6rGAdhvV0Cab34w03g00HPaWBbQqw"
+      domain={config.domain}
+      clientId={config.clientId}
       authorizationParams={{
         redirect_uri: window.location.origin,
-        audience: "https://louis-type-game.netlify.app/",
+        audience: config.audience,
       }}
     >
       <ScoreProvider>
