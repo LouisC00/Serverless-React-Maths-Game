@@ -31,6 +31,15 @@ export const StyledLink = styled(Link)`
   transition: color 200ms;
 
   &:hover {
-    color: #e16365;
+    color: var(--accent-color);
+  }
+`;
+
+export const StyleButtonLink = styled.div`
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  &:hover {
+    color: var(--accent-color);
   }
 `;
