@@ -20,6 +20,7 @@ const getAccessTokenFromHeaders = (headers) => {
   }
 
   const accessToken = authorizationParts[1];
+  console.log("accessToken: ", accessToken);
   return accessToken;
 };
 
@@ -36,6 +37,7 @@ const validateAccessToken = async (token) => {
 
     const options = { algorithms: "RS256" };
     jwt.verify(token, signingKey, options);
+    console.log("decodedToken.payload: ", decodedToken.payload);
     return decodedToken.payload;
   } catch (err) {
     console.log(err);
