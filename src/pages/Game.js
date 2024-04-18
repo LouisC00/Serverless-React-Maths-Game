@@ -4,6 +4,8 @@ import {
   StyledGame,
   StyledScore,
   StyledTimer,
+  GridContainer,
+  StyledCard,
   StyledCharacter,
 } from "../styled/Game";
 import { StrongText } from "../styled/StrongText";
@@ -14,7 +16,7 @@ const addLeadingZeros = (num, length) => {
 };
 
 export default function Game() {
-  const MAX_SECOND = 5;
+  const MAX_SECOND = 50;
   const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
 
   const [currentCharacter, setCurrentCharacter] = useState("");
@@ -92,13 +94,19 @@ export default function Game() {
   return (
     <StyledGame>
       <StyledScore>
-        Score:<StrongText>{score}</StrongText>
+        Score: <StrongText>{score}</StrongText>
       </StyledScore>
-      <StyledCharacter>{currentCharacter}</StyledCharacter>
+      <GridContainer>
+        {Array.from({ length: 9 }, (_, i) => (
+          <StyledCard key={i}>
+            <StyledCharacter>{currentCharacter}</StyledCharacter>
+          </StyledCard>
+        ))}
+      </GridContainer>
       <StyledTimer>
         Time:{" "}
         <StrongText>
-          {addLeadingZeros(seconds, 2)}: {addLeadingZeros(ms, 3)}
+          {addLeadingZeros(seconds, 2)}:{addLeadingZeros(ms, 3)}
         </StrongText>
       </StyledTimer>
     </StyledGame>
