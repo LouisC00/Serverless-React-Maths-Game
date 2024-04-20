@@ -6,7 +6,8 @@ import {
   StyledTimer,
   GridContainer,
   StyledCard,
-  StyledCharacter,
+  StyledQuestion,
+  StyledAnswer,
 } from "../styled/Game";
 import { StrongText } from "../styled/StrongText";
 import { useScore } from "../context/ScoreContext";
@@ -16,8 +17,8 @@ const defaultHeart = 300;
 const numCards = 9; // Number of cards you want to display
 
 const generateCard = () => {
-  const num1 = Math.floor(Math.random() * 20) + 10;
-  const num2 = Math.floor(Math.random() * 20) + 10;
+  const num1 = Math.floor(Math.random() * 10000) + 10;
+  const num2 = Math.floor(Math.random() * 10000) + 10;
   return {
     id: Math.random(),
     question: `${num1} + ${num2}`,
@@ -69,9 +70,10 @@ export default function Game() {
         });
 
         if (completedCard) {
-          // If a card is completed, reset all typings
+          // If a card is completed, reset all typings and clear matches
           const resetCards = newCards.map((card) => ({ ...card, typed: "" }));
           setCards(resetCards);
+          matches = []; // Clear matches as we reset all cards
         } else if (!correctInput) {
           // Reduce hearts only if no correct input
           setHearts((hearts) => Math.max(0, hearts - 1));
@@ -80,6 +82,7 @@ export default function Game() {
           // Check for any potential matches with new input among reset cards
           const finalCards = resetCards.map((card) => {
             if (card.typed === "" && card.answer.startsWith(newInput)) {
+              matches.push(card.id); // Add to matches if it's now a valid start
               return { ...card, typed: newInput };
             }
             return card;
@@ -92,7 +95,7 @@ export default function Game() {
         setTypedCardIds(matches); // Update which cards are being typed
       }
     },
-    [cards, typedCardIds, setScore, setHearts] // Update dependencies to include setHearts
+    [cards, typedCardIds, setScore, setHearts] // Ensure dependencies are correctly listed
   );
 
   useEffect(() => {
@@ -131,8 +134,8 @@ export default function Game() {
       <GridContainer>
         {cards.map((card, i) => (
           <StyledCard key={card.id}>
-            <StyledCharacter>{card.question}</StyledCharacter>
-            <StyledCharacter>{card.typed}</StyledCharacter>
+            <StyledQuestion>{card.question}</StyledQuestion>
+            <StyledAnswer>{card.typed}</StyledAnswer>
           </StyledCard>
         ))}
       </GridContainer>
