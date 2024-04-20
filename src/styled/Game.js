@@ -38,20 +38,48 @@ export const GridContainer = styled.div`
   align-items: start; // Align grid items to start vertically
 `;
 
-export const StyledCard = styled.div`
-  width: 100%; // Full width of the column
-  aspect-ratio: 1 / 1; // Maintain a square aspect ratio
-  background-color: #383838;
-  border-radius: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 export const StyledCharacter = styled.p`
   font-size: calc(10vw / 3); // Adjust font size based on viewport width
   color: var(--accent-color);
   text-align: center;
   margin: 0;
   transform: translateY(-10%);
+`;
+
+export const StyledCard = styled.div`
+  width: 100%; // Full width of the column
+  aspect-ratio: 1 / 1; // Maintain a square aspect ratio
+  background-color: #383838;
+  border-radius: 15px;
+  display: grid;
+  grid-template-rows: 2fr 2fr 1fr 2fr 2fr; // Adjusts the row sizes, giving more space to question and answer rows
+  align-items: start; // Aligns content to the top of each cell
+  justify-items: center; // Center items within each cell
+`;
+
+export const StyledQuestion = styled.p`
+  grid-row: 2; // Place in the second row
+  font-size: clamp(
+    12px,
+    10vw / 3,
+    32px
+  ); // Adjustable font size with min and max
+  color: var(--accent-color);
+  text-align: center;
+  margin: 0;
+`;
+
+export const StyledAnswer = styled.p`
+  grid-row: 4; // Place in the fourth row
+  font-size: clamp(
+    10px,
+    12vw / 3,
+    38px
+  ); // Slightly smaller font size than question
+  color: var(--accent-color);
+  text-align: center;
+  width: 90%;
+  overflow: hidden; // Hides overflow text
+  text-overflow: ellipsis; // Adds ellipsis to overflowing text
+  white-space: nowrap; // Ensures text stays in a single line
 `;
