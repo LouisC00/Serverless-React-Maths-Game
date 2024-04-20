@@ -52,20 +52,29 @@ export default function Game() {
         let completedCard = false; // Flag to indicate card completion
 
         const newCards = cards.map((card) => {
+          // Determine the new potential typed string
+          const updatedTyped = card.typed + newInput;
+
+          // Check if the card is currently being typed and if it matches the new input
           if (
             (typedCardIds.length === 0 || typedCardIds.includes(card.id)) &&
-            card.answer.startsWith(card.typed + newInput)
+            card.answer.startsWith(updatedTyped)
           ) {
-            let updatedTyped = card.typed + newInput;
-            correctInput = true;
+            correctInput = true; // At least one card matches
             if (updatedTyped === card.answer) {
-              completedCard = true; // Set the completion flag
+              completedCard = true; // This card is completely answered
               setScore((score) => score + 1); // Increment score
-              return generateCard(); // Generates a new card
+              return generateCard(); // Replace the completed card with a new one
             }
-            matches.push(card.id); // Track card as matched
+            matches.push(card.id); // This card continues to match
             return { ...card, typed: updatedTyped };
+          } else {
+            // Reset typed if this card was previously being typed but no longer matches
+            if (typedCardIds.includes(card.id)) {
+              return { ...card, typed: "" };
+            }
           }
+          // Return card as is if it was not being typed or didn't need to be reset
           return card;
         });
 
@@ -75,6 +84,7 @@ export default function Game() {
           setCards(resetCards);
           matches = []; // Clear matches as we reset all cards
         } else if (!correctInput) {
+          matches = [];
           // Reduce hearts only if no correct input
           setHearts((hearts) => Math.max(0, hearts - 1));
           // Reset the typing on all cards
