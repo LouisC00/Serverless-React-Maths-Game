@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom"; // Assuming useNavigate is used for routing
 import {
   StyledGame,
   StyledScore,
@@ -11,85 +11,117 @@ import {
 import { StrongText } from "../styled/StrongText";
 import { useScore } from "../context/ScoreContext";
 
-const addLeadingZeros = (num, length) => {
-  return String(num).padStart(length, "0");
+const defaultTime = 500;
+const defaultHeart = 300;
+const numCards = 9; // Number of cards you want to display
+
+const generateCard = () => {
+  const num1 = Math.floor(Math.random() * 20) + 10;
+  const num2 = Math.floor(Math.random() * 20) + 10;
+  return {
+    id: Math.random(),
+    question: `${num1} + ${num2}`,
+    answer: `${num1 + num2}`,
+    time: defaultTime,
+    typed: "",
+  };
 };
 
 export default function Game() {
-  const MAX_SECOND = 50;
-  const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
-
-  const [currentCharacter, setCurrentCharacter] = useState("");
-
+  const [cards, setCards] = useState(
+    Array.from({ length: numCards }, generateCard)
+  );
+  const [hearts, setHearts] = useState();
   const [score, setScore] = useScore();
-  const [ms, setMs] = useState(0);
-  const [seconds, setSeconds] = useState(0);
-  const navigate = useNavigate(); // Use the useNavigate hook
+  const [typedCardIds, setTypedCardIds] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setRandomCharacter();
     setScore(0);
-    const startTime = new Date();
-    const interval = setInterval(() => {
-      const endTime = new Date();
-      const msPassed = endTime.getTime() - startTime.getTime();
-      const remainingSeconds = MAX_SECOND - Math.floor(msPassed / 1000);
-      const remainingMs = 1000 - (msPassed % 1000);
-      setSeconds(remainingSeconds);
-      setMs(remainingMs);
-    }, 1);
-    return () => clearInterval(interval);
+    setHearts(defaultHeart);
   }, [setScore]);
 
-  useEffect(() => {
-    if (seconds <= -1) {
-      navigate("/gameOver"); // Use navigate instead of history.push
-    }
-  }, [seconds, ms, navigate]);
+  const handleKeyDown = useCallback(
+    (event) => {
+      if (event.key >= "0" && event.key <= "9") {
+        let newInput = event.key;
+        let matches = [];
+        let correctInput = false;
+        let completedCard = false; // Flag to indicate card completion
 
-  const keyDownHandler = useCallback(
-    (e) => {
-      if (e.key === currentCharacter) {
-        setScore((prevScore) => prevScore + 1);
-      } else {
-        if (score > 0) {
-          setScore((prevScore) => prevScore - 1);
+        const newCards = cards.map((card) => {
+          if (
+            (typedCardIds.length === 0 || typedCardIds.includes(card.id)) &&
+            card.answer.startsWith(card.typed + newInput)
+          ) {
+            let updatedTyped = card.typed + newInput;
+            correctInput = true;
+            if (updatedTyped === card.answer) {
+              completedCard = true; // Set the completion flag
+              setScore((score) => score + 1); // Increment score
+              return generateCard(); // Generates a new card
+            }
+            matches.push(card.id); // Track card as matched
+            return { ...card, typed: updatedTyped };
+          }
+          return card;
+        });
+
+        if (completedCard) {
+          // If a card is completed, reset all typings
+          const resetCards = newCards.map((card) => ({ ...card, typed: "" }));
+          setCards(resetCards);
+        } else if (!correctInput) {
+          // Reduce hearts only if no correct input
+          setHearts((hearts) => Math.max(0, hearts - 1));
+          // Reset the typing on all cards
+          const resetCards = newCards.map((card) => ({ ...card, typed: "" }));
+          // Check for any potential matches with new input among reset cards
+          const finalCards = resetCards.map((card) => {
+            if (card.typed === "" && card.answer.startsWith(newInput)) {
+              return { ...card, typed: newInput };
+            }
+            return card;
+          });
+          setCards(finalCards);
+        } else {
+          setCards(newCards); // Update cards state with correct input
         }
+
+        setTypedCardIds(matches); // Update which cards are being typed
       }
-      setRandomCharacter();
     },
-    [currentCharacter, score, setScore]
+    [cards, typedCardIds, setScore, setHearts] // Update dependencies to include setHearts
   );
 
   useEffect(() => {
-    document.addEventListener("keydown", keyDownHandler);
-    return () => {
-      document.removeEventListener("keydown", keyDownHandler);
-    };
-  }, [keyDownHandler]);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]); // handleKeyDown is now stable across renders
 
-  // useEffect(() => {
-  //   const keyDownHandler = (e) => {
-  //     if (e.key === currentCharacter) {
-  //       setScore((prevScore) => prevScore + 1);
-  //     } else {
-  //       if (score > 0) {
-  //         setScore((prevScore) => prevScore - 1);
-  //       }
-  //     }
-  //     setRandomCharacter();
-  //   };
+  useEffect(() => {
+    if (hearts <= 0) {
+      navigate("/gameOver");
+    }
+  }, [hearts, navigate]);
 
-  //   document.addEventListener("keydown", keyDownHandler);
-  //   return () => {
-  //     document.removeEventListener("keydown", keyDownHandler);
-  //   };
-  // }, [currentCharacter]);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCards((prevCards) =>
+        prevCards.map((card) => {
+          if (card.time > 1) {
+            return { ...card, time: card.time - 1 };
+          } else {
+            setHearts((hearts) => Math.max(0, hearts - 1));
+            return generateCard(); // Generate a new card when time expires
+          }
+        })
+      );
+    }, 1000);
 
-  const setRandomCharacter = () => {
-    const randomInt = Math.floor(Math.random() * 36);
-    setCurrentCharacter(characters[randomInt]);
-  };
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <StyledGame>
@@ -97,18 +129,14 @@ export default function Game() {
         Score: <StrongText>{score}</StrongText>
       </StyledScore>
       <GridContainer>
-        {Array.from({ length: 9 }, (_, i) => (
-          <StyledCard key={i}>
-            <StyledCharacter>{currentCharacter}</StyledCharacter>
+        {cards.map((card, i) => (
+          <StyledCard key={card.id}>
+            <StyledCharacter>{card.question}</StyledCharacter>
+            <StyledCharacter>{card.typed}</StyledCharacter>
           </StyledCard>
         ))}
       </GridContainer>
-      <StyledTimer>
-        Time:{" "}
-        <StrongText>
-          {addLeadingZeros(seconds, 2)}:{addLeadingZeros(ms, 3)}
-        </StrongText>
-      </StyledTimer>
+      <div>Hearts: {hearts}</div>
     </StyledGame>
   );
 }
