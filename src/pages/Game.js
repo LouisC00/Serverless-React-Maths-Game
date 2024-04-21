@@ -188,7 +188,7 @@ export default function Game() {
 
       setTypedCardIds(matches);
     },
-    [cards, typedCardIds, setScore, setHearts]
+    [cards, typedCardIds, setScore, setHearts, score]
   );
 
   useEffect(() => {
@@ -217,7 +217,7 @@ export default function Game() {
     }, 100);
 
     return () => clearInterval(intervalId);
-  }, [setHearts]);
+  }, [setHearts, score]);
 
   return (
     <StyledGame>
