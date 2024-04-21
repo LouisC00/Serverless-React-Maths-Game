@@ -22,8 +22,8 @@ const getStageSettings = (score) => {
       // Stage 1: Simple Addition, 2 digits + 2 digits
       return {
         ranges: [
-          [1, 10],
-          [10, 100],
+          [1, 100],
+          [10, 1000],
         ],
         operation: "+",
         defaultTime: 300,
@@ -93,6 +93,29 @@ const generateCard = (currentScore) => {
     completed: false,
   };
 };
+
+function getFontSize(question) {
+  const screenWidth = window.innerWidth;
+  let baseSize = 28; // Base font size for larger screens
+
+  // Adjust base size based on screen width
+  if (screenWidth <= 320) {
+    // Very small devices
+    baseSize = 10;
+  } else if (screenWidth <= 480) {
+    // Small devices
+    baseSize = 12;
+  }
+
+  // Further adjust based on question length
+  if (question.length <= 10) {
+    return baseSize;
+  } else if (question.length <= 20) {
+    return Math.max(baseSize - (question.length - 10) * 1, baseSize * 0.75); // Decrease by up to 25% of the base size
+  } else {
+    return Math.max(baseSize - (question.length - 10) * 1.5, baseSize * 0.5); // Decrease by up to 50% of the base size
+  }
+}
 
 export default function Game() {
   const navigate = useNavigate();
@@ -204,7 +227,11 @@ export default function Game() {
       <GridContainer>
         {cards.map((card) => (
           <StyledCard key={card.id}>
-            <StyledQuestion>{card.question}</StyledQuestion>
+            <StyledQuestion
+              style={{ fontSize: `${getFontSize(card.question)}px` }}
+            >
+              {card.question}
+            </StyledQuestion>
             <StyledAnswer>{card.typed}</StyledAnswer>
             <TimeBar
               style={{
