@@ -13,18 +13,45 @@ import {
 import { StrongText } from "../styled/StrongText";
 import { useScore } from "../context/ScoreContext";
 
-const defaultTime = 3;
 const defaultHeart = 200;
 const numCards = 9; // Number of cards you want to display
 
-const generateCard = () => {
-  const num1 = Math.floor(Math.random() * 100) + 10;
-  const num2 = Math.floor(Math.random() * 100) + 10;
+const generateCard = (currentScore) => {
+  let num1, num2, question, answer, defaultTime;
+  if (currentScore < 1) {
+    // Stage 1: Simple Addition
+    num1 = Math.floor(Math.random() * 100) + 10;
+    num2 = Math.floor(Math.random() * 100) + 10;
+    question = `${num1} + ${num2}`;
+    answer = `${num1 + num2}`;
+    defaultTime = 300;
+  } else if (currentScore < 2) {
+    // Stage 2: Larger Numbers Addition
+    num1 = Math.floor(Math.random() * 900) + 100;
+    num2 = Math.floor(Math.random() * 900) + 100;
+    question = `${num1} + ${num2}`;
+    answer = `${num1 + num2}`;
+    defaultTime = 60;
+  } else if (currentScore < 5) {
+    // Stage 3: Simple Multiplication
+    num1 = Math.floor(Math.random() * 10) + 1;
+    num2 = Math.floor(Math.random() * 10) + 1;
+    question = `${num1} × ${num2}`;
+    answer = `${num1 * num2}`;
+    defaultTime = 10;
+  } else {
+    // Stage 4: Multiplication with Larger Numbers
+    num1 = Math.floor(Math.random() * 90) + 10;
+    num2 = Math.floor(Math.random() * 90) + 10;
+    question = `${num1} × ${num2}`;
+    answer = `${num1 * num2}`;
+  }
   return {
     id: Math.random(),
-    question: `${num1} + ${num2}`,
-    answer: `${num1 + num2}`,
+    question: question,
+    answer: answer.toString(),
     time: defaultTime,
+    defaultTime,
     typed: "",
     completed: false,
   };
@@ -34,7 +61,7 @@ export default function Game() {
   const navigate = useNavigate();
 
   const [cards, setCards] = useState(
-    Array.from({ length: numCards }, generateCard)
+    Array.from({ length: numCards }, () => generateCard(0))
   );
   const [hearts, setHearts] = useState();
   const [score, setScore] = useScore();
@@ -77,7 +104,7 @@ export default function Game() {
           // Add a delay to allow the fade-out animation to play
           setCards(
             newCards.map(
-              (card) => (card.completed ? generateCard() : card) // Replace completed cards with new cards
+              (card) => (card.completed ? generateCard(score) : card) // Replace completed cards with new cards
             )
           );
         }, 100);
@@ -122,7 +149,7 @@ export default function Game() {
             return { ...card, time: card.time - 0.1 };
           } else {
             setHearts((hearts) => Math.max(0, hearts - 1));
-            return generateCard(); // Generate a new card when time expires
+            return generateCard(score); // Generate a new card when time expires
           }
         })
       );
@@ -142,7 +169,7 @@ export default function Game() {
             <StyledQuestion>{card.question}</StyledQuestion>
             <StyledAnswer>{card.typed}</StyledAnswer>
             <TimeBar
-              width={((card.time - 0.05) / defaultTime) * 100}
+              width={((card.time - 0.05) / card.defaultTime) * 100}
               time={card.time}
             />
           </StyledCard>
