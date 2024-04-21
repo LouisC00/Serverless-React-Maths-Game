@@ -15,7 +15,7 @@ import { useScore } from "../context/ScoreContext";
 
 const defaultTime = 3;
 const defaultHeart = 200;
-const numCards = 1; // Number of cards you want to display
+const numCards = 9; // Number of cards you want to display
 
 const generateCard = () => {
   const num1 = Math.floor(Math.random() * 100) + 10;
@@ -118,7 +118,7 @@ export default function Game() {
     const intervalId = setInterval(() => {
       setCards((prevCards) =>
         prevCards.map((card) => {
-          if (card.time > -0.05) {
+          if (card.time > 0) {
             return { ...card, time: card.time - 0.1 };
           } else {
             setHearts((hearts) => Math.max(0, hearts - 1));
