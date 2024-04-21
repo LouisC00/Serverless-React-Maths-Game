@@ -16,37 +16,73 @@ import { useScore } from "../context/ScoreContext";
 const defaultHeart = 200;
 const numCards = 9; // Number of cards you want to display
 
-const generateCard = (currentScore) => {
-  let num1, num2, question, answer, defaultTime;
-  if (currentScore < 1) {
-    // Stage 1: Simple Addition
-    num1 = Math.floor(Math.random() * 100) + 10;
-    num2 = Math.floor(Math.random() * 100) + 10;
-    question = `${num1} + ${num2}`;
-    answer = `${num1 + num2}`;
-    defaultTime = 300;
-  } else if (currentScore < 2) {
-    // Stage 2: Larger Numbers Addition
-    num1 = Math.floor(Math.random() * 900) + 100;
-    num2 = Math.floor(Math.random() * 900) + 100;
-    question = `${num1} + ${num2}`;
-    answer = `${num1 + num2}`;
-    defaultTime = 60;
-  } else if (currentScore < 5) {
-    // Stage 3: Simple Multiplication
-    num1 = Math.floor(Math.random() * 10) + 1;
-    num2 = Math.floor(Math.random() * 10) + 1;
-    question = `${num1} × ${num2}`;
-    answer = `${num1 * num2}`;
-    defaultTime = 10;
-  } else {
-    // Stage 4: Multiplication with Larger Numbers
-    num1 = Math.floor(Math.random() * 90) + 10;
-    num2 = Math.floor(Math.random() * 90) + 10;
-    question = `${num1} × ${num2}`;
-    answer = `${num1 * num2}`;
-    defaultTime = 10;
+const getStageSettings = (score) => {
+  switch (true) {
+    case score < 1:
+      // Stage 1: Simple Addition, 2 digits + 2 digits
+      return {
+        ranges: [
+          [1, 10],
+          [10, 100],
+        ],
+        operation: "+",
+        defaultTime: 300,
+      };
+    case score < 2:
+      // Stage 2: Larger Numbers Addition, 3 digits + 3 digits
+      return {
+        ranges: [
+          [100, 1000],
+          [100, 1000],
+        ],
+        operation: "+",
+        defaultTime: 60,
+      };
+    case score < 5:
+      // Stage 3: Simple Multiplication, 1 digit × 1 digit
+      return {
+        ranges: [
+          [1, 10],
+          [1, 10],
+        ],
+        operation: "×",
+        defaultTime: 10,
+      };
+    default:
+      // Stage 4: Multiplication with Larger Numbers, 2 digits × 2 digits
+      return {
+        ranges: [
+          [10, 100],
+          [10, 100],
+        ],
+        operation: "×",
+        defaultTime: 10,
+      };
   }
+};
+
+const generateCard = (currentScore) => {
+  const { ranges, operation, defaultTime } = getStageSettings(currentScore);
+  const num1 =
+    Math.floor(Math.random() * (ranges[0][1] - ranges[0][0])) + ranges[0][0];
+  const num2 =
+    Math.floor(Math.random() * (ranges[1][1] - ranges[1][0])) + ranges[1][0];
+
+  let question;
+  let answer;
+  switch (operation) {
+    case "+":
+      question = `${num1} + ${num2}`;
+      answer = num1 + num2;
+      break;
+    case "×":
+      question = `${num1} × ${num2}`;
+      answer = num1 * num2;
+      break;
+    default:
+      throw new Error("Unsupported operation");
+  }
+
   return {
     id: Math.random(),
     question: question,
