@@ -3,17 +3,18 @@ import { useNavigate } from "react-router-dom"; // Assuming useNavigate is used 
 import {
   StyledGame,
   StyledScore,
-  StyledTimer,
+  StyledHeart,
   GridContainer,
   StyledCard,
   StyledQuestion,
   StyledAnswer,
+  TimeBar,
 } from "../styled/Game";
 import { StrongText } from "../styled/StrongText";
 import { useScore } from "../context/ScoreContext";
 
-const defaultTime = 500;
-const defaultHeart = 300;
+const defaultTime = 100;
+const defaultHeart = 3;
 const numCards = 9; // Number of cards you want to display
 
 const generateCard = () => {
@@ -25,6 +26,7 @@ const generateCard = () => {
     answer: `${num1 + num2}`,
     time: defaultTime,
     typed: "",
+    completed: false,
   };
 };
 
@@ -59,8 +61,7 @@ export default function Game() {
         if (isBeingTyped && card.answer.startsWith(updatedTyped)) {
           if (updatedTyped === card.answer) {
             completedCard = true;
-            setScore((prevScore) => prevScore + 1);
-            return generateCard();
+            return { ...card, typed: updatedTyped, completed: true }; // Mark the current card as
           }
           matches.push(card.id);
           return { ...card, typed: updatedTyped };
@@ -69,8 +70,18 @@ export default function Game() {
         return typedCardIds.includes(card.id) ? { ...card, typed: "" } : card;
       });
 
+      setCards(newCards);
+
       if (completedCard) {
-        setCards(newCards.map((card) => ({ ...card, typed: "" })));
+        setTimeout(() => {
+          // Add a delay to allow the fade-out animation to play
+          setCards(
+            newCards.map(
+              (card) => (card.completed ? generateCard() : card) // Replace completed cards with new cards
+            )
+          );
+        }, 100); // Assuming the fade-out animation duration is 1 second
+        setScore((prevScore) => prevScore + 1);
         matches = [];
       } else if (matches.length === 0) {
         setHearts((prevHearts) => Math.max(0, prevHearts - 1));
@@ -126,14 +137,17 @@ export default function Game() {
         Score: <StrongText>{score}</StrongText>
       </StyledScore>
       <GridContainer>
-        {cards.map((card, i) => (
-          <StyledCard key={card.id}>
+        {cards.map((card) => (
+          <StyledCard key={card.id} duration={card.time}>
             <StyledQuestion>{card.question}</StyledQuestion>
             <StyledAnswer>{card.typed}</StyledAnswer>
+            <TimeBar width={(card.time / defaultTime) * 100} />
           </StyledCard>
         ))}
       </GridContainer>
-      <div>Hearts: {hearts}</div>
+      <StyledHeart>
+        {Array.from({ length: hearts }, () => "❤️").join("")}
+      </StyledHeart>
     </StyledGame>
   );
 }
