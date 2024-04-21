@@ -80,7 +80,7 @@ export default function Game() {
               (card) => (card.completed ? generateCard() : card) // Replace completed cards with new cards
             )
           );
-        }, 100); // Assuming the fade-out animation duration is 1 second
+        }, 100);
         setScore((prevScore) => prevScore + 1);
         matches = [];
       } else if (matches.length === 0) {
@@ -138,7 +138,7 @@ export default function Game() {
       </StyledScore>
       <GridContainer>
         {cards.map((card) => (
-          <StyledCard key={card.id} duration={card.time}>
+          <StyledCard key={card.id}>
             <StyledQuestion>{card.question}</StyledQuestion>
             <StyledAnswer>{card.typed}</StyledAnswer>
             <TimeBar width={(card.time / defaultTime) * 100} />
