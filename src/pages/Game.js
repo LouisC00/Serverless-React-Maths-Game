@@ -104,7 +104,8 @@ export default function Game() {
           // Add a delay to allow the fade-out animation to play
           setCards(
             newCards.map(
-              (card) => (card.completed ? generateCard(score) : card) // Replace completed cards with new cards
+              (card) =>
+                card.completed ? generateCard(score) : { ...card, typed: "" } // Replace completed cards with new cards and clear typed for others
             )
           );
         }, 100);
