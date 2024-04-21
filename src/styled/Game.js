@@ -93,10 +93,17 @@ export const StyledAnswer = styled.p`
   white-space: nowrap; // Ensures text stays in a single line
 `;
 
+// export const TimeBar = styled.div`
+//   width: ${(props) => props.width * 0.75}%;
+//   height: 5px;
+//   background-color: ${(props) =>
+//     props.time <= 3 ? "var(--accent-color)" : "var(--main-text-color)"};
+//   transition: width 0.1s linear;
+// `;
+
 export const TimeBar = styled.div`
-  width: ${(props) => props.width * 0.75}%;
   height: 5px;
-  background-color: ${(props) =>
-    props.time <= 3 ? "var(--accent-color)" : "var(--main-text-color)"};
+  width: var(--time-bar-width);
+  background-color: var(--time-bar-color);
   transition: width 0.1s linear;
 `;

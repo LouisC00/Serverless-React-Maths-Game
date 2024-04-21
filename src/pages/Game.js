@@ -45,6 +45,7 @@ const generateCard = (currentScore) => {
     num2 = Math.floor(Math.random() * 90) + 10;
     question = `${num1} × ${num2}`;
     answer = `${num1 * num2}`;
+    defaultTime = 10;
   }
   return {
     id: Math.random(),
@@ -170,8 +171,15 @@ export default function Game() {
             <StyledQuestion>{card.question}</StyledQuestion>
             <StyledAnswer>{card.typed}</StyledAnswer>
             <TimeBar
-              width={((card.time - 0.05) / card.defaultTime) * 100}
-              time={card.time}
+              style={{
+                "--time-bar-width": `${
+                  ((card.time - 0.05) / card.defaultTime) * 75
+                }%`,
+                "--time-bar-color":
+                  card.time <= 3
+                    ? "var(--accent-color)"
+                    : "var(--main-text-color)",
+              }}
             />
           </StyledCard>
         ))}
