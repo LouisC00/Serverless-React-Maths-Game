@@ -18,6 +18,14 @@ export const StyledScore = styled.p`
   text-align: left;
 `;
 
+export const StyledHeart = styled.p`
+  grid-column: 3;
+  font-size: 1rem;
+  padding-right: 10px;
+  align-self: center;
+  text-align: right;
+`;
+
 export const StyledTimer = styled.p`
   grid-column: 3;
   font-size: 1rem;
@@ -47,14 +55,15 @@ export const StyledCharacter = styled.p`
 `;
 
 export const StyledCard = styled.div`
-  width: 100%; // Full width of the column
-  aspect-ratio: 1 / 1; // Maintain a square aspect ratio
-  background-color: #383838;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: var(--card-bg-color);
   border-radius: 15px;
   display: grid;
-  grid-template-rows: 2fr 2fr 1fr 2fr 2fr; // Adjusts the row sizes, giving more space to question and answer rows
-  align-items: start; // Aligns content to the top of each cell
-  justify-items: center; // Center items within each cell
+  grid-template-rows: 2fr 2fr 1fr 2fr 2fr;
+  align-items: start;
+  justify-items: center;
+  position: relative; // Needed for absolute positioning of the checkmark
 `;
 
 export const StyledQuestion = styled.p`
@@ -76,10 +85,17 @@ export const StyledAnswer = styled.p`
     12vw / 3,
     38px
   ); // Slightly smaller font size than question
-  color: var(--accent-color);
+  color: var(--main-text-color);
   text-align: center;
   width: 90%;
   overflow: hidden; // Hides overflow text
   text-overflow: ellipsis; // Adds ellipsis to overflowing text
   white-space: nowrap; // Ensures text stays in a single line
+`;
+
+export const TimeBar = styled.div`
+  width: ${(props) => props.width * 0.8}%;
+  height: 5px;
+  background-color: var(--main-text-color);
+  transition: width 1s linear;
 `;
