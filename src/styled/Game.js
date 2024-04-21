@@ -94,8 +94,9 @@ export const StyledAnswer = styled.p`
 `;
 
 export const TimeBar = styled.div`
-  width: ${(props) => props.width * 0.8}%;
+  width: ${(props) => props.width * 0.75}%;
   height: 5px;
-  background-color: var(--main-text-color);
-  transition: width 1s linear;
+  background-color: ${(props) =>
+    props.time <= 3 ? "var(--accent-color)" : "var(--main-text-color)"};
+  transition: width 0.1s linear;
 `;

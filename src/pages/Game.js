@@ -13,9 +13,9 @@ import {
 import { StrongText } from "../styled/StrongText";
 import { useScore } from "../context/ScoreContext";
 
-const defaultTime = 100;
-const defaultHeart = 3;
-const numCards = 9; // Number of cards you want to display
+const defaultTime = 3;
+const defaultHeart = 200;
+const numCards = 1; // Number of cards you want to display
 
 const generateCard = () => {
   const num1 = Math.floor(Math.random() * 100) + 10;
@@ -118,18 +118,18 @@ export default function Game() {
     const intervalId = setInterval(() => {
       setCards((prevCards) =>
         prevCards.map((card) => {
-          if (card.time > 1) {
-            return { ...card, time: card.time - 1 };
+          if (card.time > -0.05) {
+            return { ...card, time: card.time - 0.1 };
           } else {
             setHearts((hearts) => Math.max(0, hearts - 1));
             return generateCard(); // Generate a new card when time expires
           }
         })
       );
-    }, 1000);
+    }, 100);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [setHearts]);
 
   return (
     <StyledGame>
@@ -141,12 +141,16 @@ export default function Game() {
           <StyledCard key={card.id}>
             <StyledQuestion>{card.question}</StyledQuestion>
             <StyledAnswer>{card.typed}</StyledAnswer>
-            <TimeBar width={(card.time / defaultTime) * 100} />
+            <TimeBar
+              width={((card.time - 0.05) / defaultTime) * 100}
+              time={card.time}
+            />
           </StyledCard>
         ))}
       </GridContainer>
       <StyledHeart>
-        {Array.from({ length: hearts }, () => "❤️").join("")}
+        {hearts}
+        {/* {Array.from({ length: hearts }, () => "❤️").join("")} */}
       </StyledHeart>
     </StyledGame>
   );
