@@ -6,6 +6,7 @@ export const GlobalStyle = createGlobalStyle`
     --main-bg-color: ${(props) => props.theme.mainBgColor};
     --main-text-color: ${(props) => props.theme.mainTextColor};
     --accent-color: ${(props) => props.theme.accent};
+    --card-bg-color: ${(props) => props.theme.cardBgColor};
 }
 
 * {
