@@ -5,7 +5,7 @@ export const StyledGame = styled.div`
   height: 75vh; // Max height can adjust according to viewport height
   max-height: 500px;
   grid-template-rows: auto 1fr; // Auto for the header and flexible space for the grid
-  grid-template-columns: 1fr 3fr 1fr; // More fluid columns
+  grid-template-columns: 1fr 0 1fr; // More fluid columns
   padding: 0 20px; // Padding for small screens
   gap: 10px; // Gap between grid items
 `;
@@ -47,12 +47,13 @@ export const GridContainer = styled.div`
   padding: 1vw; // Use viewport width for dynamic padding
   justify-content: center; // Center the grid container within its space
   align-items: start; // Align grid items to start vertically
+  aspect-ratio: 1 / 1;
 
-  @media (max-width: 600px) {
-    grid-row: 1; // Move to the first row on small screens
-  }
+  /* @media (max-width: 600px) {
+    grid-row: 2; // Move to the first row on small screens
+  } */
 
-  @media (max-width: 320px) {
+  /* @media (max-width: 320px) {
     // Targeting very small devices
     GridContainer {
       grid-template-columns: repeat(
@@ -61,7 +62,7 @@ export const GridContainer = styled.div`
       ); // Possibly reduce the number of columns
       grid-gap: 5px; // Reduce the gap
     }
-  }
+  } */
 `;
 
 export const StyledCharacter = styled.p`
