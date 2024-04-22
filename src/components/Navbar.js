@@ -17,7 +17,7 @@ export default function Navbar({ toggleTheme }) {
     <StyledNavBar>
       <StyledNavBrand>
         <Link to="/">
-          I know the<Accent>Maths</Accent>
+          I know the <Accent>Maths</Accent>
         </Link>
       </StyledNavBrand>
       <StyleNavItems>
