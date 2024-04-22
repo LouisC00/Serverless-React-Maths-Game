@@ -1,10 +1,10 @@
-# Real-Time Typing Game
+# I Know the Maths
 
-A competitive, real-time typing game built with React and serverless architecture. Players can join a game, type randomly generated words, and compete for the highest score. The game features serverless functions for managing game sessions and high scores, JWT authentication for secure user identification, and a responsive design for an engaging user experience.
+A competitive, real-time math problem-solving game built with React and serverless architecture. Players can join a game, solve dynamically generated math problems, and compete for the highest score. The game utilizes serverless functions to manage game sessions and high scores, employs JWT authentication for secure user identification, and features a responsive design for an engaging user experience.
 
 ## Key Features
 
-- **Real-Time Gameplay:** Players can join ongoing games and compete in real-time to type words as quickly as possible.
+- **Real-Time Gameplay:** Players can join ongoing games and compete in real-time to solve math problems as quickly and accurately as possible.
 - **High Score Leaderboard:** Players can view the leaderboard to see how they rank against others, with high scores stored and managed using serverless functions and Airtable.
 - **Authentication:** Secure user authentication is provided by Auth0, ensuring that only registered players can access the game and save their scores.
 - **Responsive Design:** The game is styled using styled-components, providing a consistent and enjoyable experience across various devices.
@@ -17,7 +17,7 @@ A competitive, real-time typing game built with React and serverless architectur
 
 ## Project Overview
 
-In this project, I've developed a real-time typing game using React for the frontend and serverless architecture for the backend. The game challenges players to type words as quickly as possible, with their scores being saved and displayed on a global leaderboard. By leveraging serverless functions hosted on Netlify, the game can handle multiple concurrent players without the need for a traditional server setup. Additionally, the integration of Auth0 for authentication ensures that players' scores are securely associated with their accounts.
+In this project, I've developed a real-time math problem-solving game using React for the frontend and serverless architecture for the backend. The game challenges players to solve math problems accurately and quickly, with their scores being saved and displayed on a global leaderboard. Leveraging serverless functions hosted on Netlify allows the game to handle multiple concurrent players without a traditional server setup. Additionally, the integration of Auth0 for authentication ensures that players' scores are securely associated with their accounts.
 
 ## Getting Started
 
@@ -30,12 +30,12 @@ In this project, I've developed a real-time typing game using React for the fron
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/real-time-typing-game.git
+   git clone https://github.com/LouisC00/Serverless-React-Maths-Game.git
    ```
 2. Navigate to the project directory:
 
    ```bash
-   cd real-time-typing-game
+   cd Serverless-React-Maths-Game
    ```
 
 3. Install dependencies:
@@ -53,13 +53,7 @@ In this project, I've developed a real-time typing game using React for the fron
 4. Start the development server:
 
    ```bash
-   npm start
-   ```
-
-   or
-
-   ```bash
-   yarn start
+   netlify dev
    ```
 
 ### Deployment
