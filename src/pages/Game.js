@@ -12,73 +12,87 @@ import {
 } from "../styled/Game";
 import { StrongText } from "../styled/StrongText";
 import { useScore } from "../context/ScoreContext";
+import { stages } from "../utils/stages";
 
-const defaultHeart = 200;
+const defaultHeart = 2000000;
 const numCards = 9; // Number of cards you want to display
 
 const getStageSettings = (score) => {
-  switch (true) {
-    case score < 1:
-      // Stage 1: Simple Addition, 2 digits + 2 digits
-      return {
-        ranges: [
-          [1, 100],
-          [10, 1000],
-        ],
-        operation: "+",
-        defaultTime: 300,
-      };
-    case score < 2:
-      // Stage 2: Larger Numbers Addition, 3 digits + 3 digits
-      return {
-        ranges: [
-          [100, 1000],
-          [100, 1000],
-        ],
-        operation: "+",
-        defaultTime: 60,
-      };
-    case score < 5:
-      // Stage 3: Simple Multiplication, 1 digit × 1 digit
-      return {
-        ranges: [
-          [1, 10],
-          [1, 10],
-        ],
-        operation: "×",
-        defaultTime: 10,
-      };
-    default:
-      // Stage 4: Multiplication with Larger Numbers, 2 digits × 2 digits
-      return {
-        ranges: [
-          [10, 100],
-          [10, 100],
-        ],
-        operation: "×",
-        defaultTime: 10,
-      };
+  // Find the closest stage that the score qualifies for
+  const stage = stages.reduce(
+    (acc, stage) => (score >= stage.scoreMin ? stage : acc),
+    null
+  );
+  if (!stage) {
+    throw new Error("Invalid score: No stage configuration found.");
   }
+  // Randomly select an operation from the available operations in the stage
+  const operationConfig =
+    stage.operations[Math.floor(Math.random() * stage.operations.length)];
+  return operationConfig;
 };
 
 const generateCard = (currentScore) => {
+  currentScore = 560;
   const { ranges, operation, defaultTime } = getStageSettings(currentScore);
-  const num1 =
-    Math.floor(Math.random() * (ranges[0][1] - ranges[0][0])) + ranges[0][0];
-  const num2 =
-    Math.floor(Math.random() * (ranges[1][1] - ranges[1][0])) + ranges[1][0];
 
-  let question;
-  let answer;
+  let num1, num2;
+
+  // Choose num2 within its range
+  num2 =
+    Math.floor(Math.random() * (ranges[1][1] - ranges[1][0] + 1)) +
+    ranges[1][0];
+
+  let question, answer;
+
   switch (operation) {
+    case "÷":
+      // Generate multipliers that are not simply powers of 10 to avoid trailing zeros
+      const minMultiplier = Math.ceil(ranges[0][0] / num2);
+      const maxMultiplier = Math.floor(ranges[0][1] / num2);
+
+      // Ensure there are valid multipliers within the range
+      if (minMultiplier <= maxMultiplier) {
+        const multiplier =
+          Math.floor(Math.random() * (maxMultiplier - minMultiplier + 1)) +
+          minMultiplier;
+        num1 = num2 * multiplier;
+      } else {
+        // Fallback to prevent division by zero or out of range errors
+        num1 = num2;
+      }
+
+      question = `${num1} ÷ ${num2}`;
+      answer = Math.floor(num1 / num2);
+      break;
+
     case "+":
+      num1 =
+        Math.floor(Math.random() * (ranges[0][1] - ranges[0][0] + 1)) +
+        ranges[0][0];
       question = `${num1} + ${num2}`;
       answer = num1 + num2;
       break;
+
+    case "−":
+      num1 =
+        Math.floor(Math.random() * (ranges[0][1] - ranges[0][0] + 1)) +
+        ranges[0][0];
+      if (num1 < num2) {
+        [num1, num2] = [num2, num1]; // Ensure num1 is larger
+      }
+      question = `${num1} − ${num2}`;
+      answer = num1 - num2;
+      break;
+
     case "×":
+      num1 =
+        Math.floor(Math.random() * (ranges[0][1] - ranges[0][0] + 1)) +
+        ranges[0][0];
       question = `${num1} × ${num2}`;
       answer = num1 * num2;
       break;
+
     default:
       throw new Error("Unsupported operation");
   }
@@ -121,7 +135,7 @@ export default function Game() {
   const navigate = useNavigate();
 
   const [cards, setCards] = useState(
-    Array.from({ length: numCards }, () => generateCard(0))
+    Array.from({ length: numCards }, () => generateCard(360))
   );
   const [hearts, setHearts] = useState();
   const [score, setScore] = useScore();
