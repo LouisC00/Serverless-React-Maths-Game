@@ -14,7 +14,7 @@ import { StrongText } from "../styled/StrongText";
 import { useScore } from "../context/ScoreContext";
 import { stages } from "../utils/stages";
 
-const defaultHeart = 2000000;
+const defaultHeart = 3;
 const numCards = 9; // Number of cards you want to display
 
 const getStageSettings = (score) => {
@@ -33,7 +33,6 @@ const getStageSettings = (score) => {
 };
 
 const generateCard = (currentScore) => {
-  currentScore = 560;
   const { ranges, operation, defaultTime } = getStageSettings(currentScore);
 
   let num1, num2;
@@ -265,8 +264,7 @@ export default function Game() {
         ))}
       </GridContainer>
       <StyledHeart>
-        {hearts}
-        {/* {Array.from({ length: hearts }, () => "❤️").join("")} */}
+        {Array.from({ length: hearts }, () => "❤️").join("")}
       </StyledHeart>
     </StyledGame>
   );
