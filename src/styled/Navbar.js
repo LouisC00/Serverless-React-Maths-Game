@@ -6,6 +6,11 @@ export const StyledNavBar = styled.nav`
   grid-template-columns: 1fr auto;
   padding: 20px;
   align-items: center;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr; // Stack items vertically on smaller screens
+    grid-auto-flow: row;
+  }
 `;
 
 export const StyledNavBrand = styled.div`
