@@ -119,6 +119,9 @@ function getFontSize(question) {
   } else if (screenWidth <= 480) {
     // Small devices
     baseSize = 12;
+  } else if (screenWidth <= 660) {
+    // Small devices
+    baseSize = 18;
   }
 
   // Further adjust based on question length
