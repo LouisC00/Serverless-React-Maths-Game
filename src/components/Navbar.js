@@ -17,7 +17,7 @@ export default function Navbar({ toggleTheme }) {
     <StyledNavBar>
       <StyledNavBrand>
         <Link to="/">
-          Learn.Build.<Accent>Type.</Accent>
+          I know the<Accent>Maths</Accent>
         </Link>
       </StyledNavBrand>
       <StyleNavItems>
