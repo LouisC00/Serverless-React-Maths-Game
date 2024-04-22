@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <div>
-      <StyledTitle>Ready to Type?</StyledTitle>
+      <StyledTitle>Ready to Solve?</StyledTitle>
       <CallToAction to="/game">
         Click or type <Accent>'s'</Accent> to start playing!
       </CallToAction>
