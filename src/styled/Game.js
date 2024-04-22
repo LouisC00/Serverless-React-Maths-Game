@@ -12,17 +12,17 @@ export const StyledGame = styled.div`
 
 export const StyledScore = styled.p`
   grid-column: 1;
+  justify-self: start; // Aligns the score to the left
   font-size: 1rem; // Smaller font size for smaller screens
   padding-left: 10px;
-  align-self: center;
   text-align: left;
+  white-space: nowrap;
 `;
 
 export const StyledHeart = styled.p`
   grid-column: 3;
   font-size: 1rem;
   padding-right: 10px;
-  align-self: center;
   text-align: right;
 `;
 
@@ -36,14 +36,32 @@ export const StyledTimer = styled.p`
 
 export const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr); // Three equal columns
+  grid-template-columns: repeat(
+    3,
+    minmax(100px, 1fr)
+  ); // Adjust min size as needed
   grid-template-rows: repeat(3, 1fr); // Three equal rows
-  grid-gap: 20px;
-  grid-row: 2; // This occupies the entire second row
+  grid-gap: 2vw; // Use viewport width for dynamic gap sizing
+  grid-row: 2; // Default to the second row
   grid-column: 1 / 4; // Span all columns in the second row
-  padding: 20px;
+  padding: 1vw; // Use viewport width for dynamic padding
   justify-content: center; // Center the grid container within its space
   align-items: start; // Align grid items to start vertically
+
+  @media (max-width: 600px) {
+    grid-row: 1; // Move to the first row on small screens
+  }
+
+  @media (max-width: 320px) {
+    // Targeting very small devices
+    GridContainer {
+      grid-template-columns: repeat(
+        2,
+        minmax(40px, 1fr)
+      ); // Possibly reduce the number of columns
+      grid-gap: 5px; // Reduce the gap
+    }
+  }
 `;
 
 export const StyledCharacter = styled.p`
