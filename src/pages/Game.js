@@ -18,7 +18,7 @@ export default function Game() {
   const navigate = useNavigate();
 
   const [cards, setCards] = useState(
-    Array.from({ length: numCards }, () => generateCard(300))
+    Array.from({ length: numCards }, () => generateCard(0))
   );
   const [hearts, setHearts] = useState();
   const [score, setScore] = useScore();
