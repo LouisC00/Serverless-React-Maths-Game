@@ -127,7 +127,7 @@ export default function Game() {
         ))}
       </GridContainer>
       <StyledHeart>
-        {Array.from({ length: hearts }, () => "❤️").join("")}
+        {Array.from({ length: hearts }, () => "❤️ ").join("")}
       </StyledHeart>
     </StyledGame>
   );
